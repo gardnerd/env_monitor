@@ -1,0 +1,23 @@
+<html>
+
+<head>
+    <title>Environmental Monitor</title>
+</head>
+
+<body>
+    <form action="/set_wifi_creds" method="POST">
+        <p>
+            <label for="ssid">Wifi SSID</label>
+            <input id="ssid" type="text" name="ssid">
+        </p>
+        <p>
+            <label for="pw">Wifi Password</label>
+            <input id="pw" type="text" name="pw">
+        </p>
+        <p>
+            <input type="submit" value="Submit">
+        </p>
+    </form>
+</body>
+
+</html>

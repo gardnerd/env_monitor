@@ -54,6 +54,13 @@
 #define DHCP_DOES_ARP_CHECK         0
 #define LWIP_DHCP_DOES_ACD_CHECK    0
 
+#define LWIP_HTTPD_SUPPORT_POST 1
+
+// Generated file containing html data
+#define HTTPD_FSDATA_FILE "pico_fsdata.inc"
+
+#define LWIP_DEBUG 1
+
 #ifndef NDEBUG
 #define LWIP_DEBUG                  1
 #define LWIP_STATS                  1
@@ -88,5 +95,6 @@
 #define PPP_DEBUG                   LWIP_DBG_OFF
 #define SLIP_DEBUG                  LWIP_DBG_OFF
 #define DHCP_DEBUG                  LWIP_DBG_OFF
+#define HTTPD_DEBUG                  LWIP_DBG_ON
 
 #endif /* __LWIPOPTS_H__ */

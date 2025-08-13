@@ -2,6 +2,9 @@
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
 
+#include "webserver.h"
+#include "secrets/wifi_creds.h"
+
 int main()
 {
     stdio_init_all();
@@ -17,7 +20,7 @@ int main()
     cyw43_arch_enable_sta_mode();
 
     printf("Connecting to Wi-Fi...\n");
-    if (cyw43_arch_wifi_connect_timeout_ms("Your Wi-Fi SSID", "Your Wi-Fi Password", CYW43_AUTH_WPA2_AES_PSK, 30000))
+    if (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PW, CYW43_AUTH_WPA2_AES_PSK, 30000))
     {
         printf("failed to connect.\n");
         return 1;
@@ -30,9 +33,10 @@ int main()
         printf("IP address %d.%d.%d.%d\n", ip_address[0], ip_address[1], ip_address[2], ip_address[3]);
     }
 
+    init_webserver();
+
     while (true)
     {
-        printf("Hello, world!\n");
         sleep_ms(1000);
     }
 }

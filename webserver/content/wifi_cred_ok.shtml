@@ -1,0 +1,12 @@
+<html>
+
+<head>
+    <title>Wifi Credentials</title>
+</head>
+
+<body>
+    <p>Wifi credentials set successfully</p>
+    <p><a href="/">Back</a></p>
+</body>
+
+</html>

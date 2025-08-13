@@ -33,9 +33,13 @@ project(env_monitor C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-# Add executable. Default name is the project name, version 0.1
+set(LWIP_OPTS_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lwip_include)
+add_subdirectory(webserver)
 
-add_executable(env_monitor main.c )
+# Add executable. Default name is the project name, version 0.1
+add_executable(env_monitor 
+    main.c 
+    )
 
 pico_set_program_name(env_monitor "env_monitor")
 pico_set_program_version(env_monitor "0.1")
@@ -50,13 +54,13 @@ target_link_libraries(env_monitor
 
 # Add the standard include files to the build
 target_include_directories(env_monitor PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}
+    ${LWIP_OPTS_INCLUDE_DIR}
 )
 
 # Add any user requested libraries
 target_link_libraries(env_monitor 
         pico_cyw43_arch_lwip_threadsafe_background
+        webserver
         )
 
 pico_add_extra_outputs(env_monitor)
-
