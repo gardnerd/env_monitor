@@ -68,7 +68,7 @@
 #endif
 
 #define ETHARP_DEBUG                LWIP_DBG_OFF
-#define NETIF_DEBUG                 LWIP_DBG_OFF
+#define NETIF_DEBUG                 LWIP_DBG_ON
 #define PBUF_DEBUG                  LWIP_DBG_OFF
 #define API_LIB_DEBUG               LWIP_DBG_OFF
 #define API_MSG_DEBUG               LWIP_DBG_OFF
@@ -95,6 +95,8 @@
 #define PPP_DEBUG                   LWIP_DBG_OFF
 #define SLIP_DEBUG                  LWIP_DBG_OFF
 #define DHCP_DEBUG                  LWIP_DBG_OFF
-#define HTTPD_DEBUG                  LWIP_DBG_ON
+#define HTTPD_DEBUG                 LWIP_DBG_ON
+
+#define PICO_CYW43_ARCH_DEBUG_ENABLED       1
 
 #endif /* __LWIPOPTS_H__ */

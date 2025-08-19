@@ -1,17 +1,20 @@
 cmake_minimum_required(VERSION 3.13)
 
-add_library(webserver STATIC)
-target_include_directories(webserver 
-    PRIVATE 
-        ${LWIP_OPTS_INCLUDE_DIR}
-        ${PICO_LWIP_CONTRIB_PATH}/apps/httpd
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-    )
-target_sources(webserver PRIVATE 
+add_library(network STATIC)
+target_sources(network PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/wifi.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/access_point.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dhcpserver.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/webserver.c
     )
-target_link_libraries(webserver PRIVATE 
+target_include_directories(network 
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    PRIVATE
+        ${PICO_LWIP_CONTRIB_PATH}/apps/httpd
+    )
+
+target_link_libraries(network PRIVATE 
     pico_cyw43_arch_lwip_threadsafe_background
     pico_lwip_http
     pico_httpd_content

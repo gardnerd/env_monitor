@@ -33,8 +33,10 @@ project(env_monitor C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-set(LWIP_OPTS_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lwip_include)
-add_subdirectory(webserver)
+
+add_subdirectory(io)
+add_subdirectory(sensing)
+add_subdirectory(network)
 
 # Add executable. Default name is the project name, version 0.1
 add_executable(env_monitor 
@@ -49,18 +51,14 @@ pico_enable_stdio_uart(env_monitor 1)
 pico_enable_stdio_usb(env_monitor 0)
 
 # Add the standard library to the build
-target_link_libraries(env_monitor
+target_link_libraries(env_monitor PRIVATE
         pico_stdlib)
 
-# Add the standard include files to the build
-target_include_directories(env_monitor PRIVATE
-    ${LWIP_OPTS_INCLUDE_DIR}
-)
-
 # Add any user requested libraries
-target_link_libraries(env_monitor 
-        pico_cyw43_arch_lwip_threadsafe_background
-        webserver
-        )
+target_link_libraries(env_monitor PRIVATE
+    network
+    io
+    sensing
+    )
 
 pico_add_extra_outputs(env_monitor)
