@@ -3,6 +3,7 @@
 #include "pico/cyw43_arch.h"
 #include "lwip/apps/httpd.h"
 #include "wifi.h"
+#include "config.h"
 
 static bool get_http_param(struct pbuf *p, const char *param_name, char *param_value, size_t param_value_max_len);
 

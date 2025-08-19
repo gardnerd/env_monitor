@@ -3,10 +3,7 @@
 #include <string.h>
 
 #include "pico/cyw43_arch.h"
-
-// Max WPA2 SSID and Password lengths (+1 to include null termination)
-static char wifi_ssid[MAX_WIFI_SSID_LENGTH + 1];
-static char wifi_pw[MAX_WIFI_PW_LENGTH + 1];
+#include "config.h"
 
 bool wifi_init()
 {
@@ -28,7 +25,7 @@ bool wifi_init()
 bool wifi_connect(const char *ssid, const char *pw)
 {
     printf("Connecting to Wi-Fi...\n");
-    if (cyw43_arch_wifi_connect_timeout_ms(ssid, pw, CYW43_AUTH_WPA2_AES_PSK, 5000))
+    if (cyw43_arch_wifi_connect_timeout_ms(ssid, pw, CYW43_AUTH_WPA2_AES_PSK, 10000))
     {
         printf("failed to connect.\n");
         return false;
@@ -52,11 +49,13 @@ bool wifi_connected()
 
 void wifi_save_creds(const char *ssid, const char *pw)
 {
-    strncpy(wifi_ssid, ssid, sizeof(wifi_ssid));
-    strncpy(wifi_pw, pw, sizeof(wifi_pw));
+    config_t config = {0};
+    strncpy(config.wifi_ssid, ssid, sizeof(config.wifi_ssid));
+    strncpy(config.wifi_pw, pw, sizeof(config.wifi_pw));
+    config_set(&config);
 }
 
 void wifi_reconnect()
 {
-    wifi_connect(wifi_ssid, wifi_pw);
+    wifi_connect(config_get()->wifi_ssid, config_get()->wifi_pw);
 }

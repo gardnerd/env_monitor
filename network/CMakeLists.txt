@@ -18,6 +18,7 @@ target_link_libraries(network PRIVATE
     pico_cyw43_arch_lwip_threadsafe_background
     pico_lwip_http
     pico_httpd_content
+    mcu_internal
     )
 
 pico_add_library(pico_httpd_content NOFLAG)

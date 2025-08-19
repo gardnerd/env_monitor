@@ -34,9 +34,9 @@ project(env_monitor C CXX ASM)
 pico_sdk_init()
 
 
-add_subdirectory(io)
-add_subdirectory(sensing)
+add_subdirectory(mcu_internal)
 add_subdirectory(network)
+add_subdirectory(sensing)
 
 # Add executable. Default name is the project name, version 0.1
 add_executable(env_monitor 
@@ -56,8 +56,8 @@ target_link_libraries(env_monitor PRIVATE
 
 # Add any user requested libraries
 target_link_libraries(env_monitor PRIVATE
+    mcu_internal
     network
-    io
     sensing
     )
 
