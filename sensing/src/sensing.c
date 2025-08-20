@@ -89,11 +89,10 @@ bool sensor_gather()
         return false;
     }
 
-    printf("%.2f, %.2f, %.2f, 0x%x\n",
+    printf("%.2f C, %.2f kPa, %.2f%% RH\n",
            data.temperature,
-           data.pressure,
-           data.humidity,
-           data.status);
+           data.pressure / 1000,
+           data.humidity);
 
     return true;
 }

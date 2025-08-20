@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "pico/bootrom.h"
+#include "pico/cyw43_arch.h"
 #include "boot/picoboot_constants.h"
 #include "hardware/gpio.h"
 
@@ -24,4 +25,9 @@ void reboot()
 bool io_reset_active()
 {
     return !gpio_get(RESET_GPIO);
+}
+
+void io_set_wifi_led(bool state)
+{
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, state);
 }

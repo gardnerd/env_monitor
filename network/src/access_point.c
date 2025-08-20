@@ -17,7 +17,7 @@ bool access_point_init()
     if (!cyw43_is_initialized(&cyw43_state))
     {
         // Initialise the Wi-Fi chip
-        if (cyw43_arch_init())
+        if (cyw43_arch_init_with_country(CYW43_COUNTRY_USA))
         {
             printf("Wi-Fi init failed\n");
             return false;

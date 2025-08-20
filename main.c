@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "pico/async_context.h"
+#include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
+#include "hardware/watchdog.h"
 
 #include "webserver.h"
 #include "access_point.h"
@@ -10,17 +13,26 @@
 #include "sensing.h"
 #include "config.h"
 
-// temporary until flash storage
-#include "secrets/wifi_creds.h"
+#define WATCHDOG_TIMEOUT_MS (30 * 1000)
+
+#define SENSOR_WORKER_PERIOD_MS (10 * 1000)
+static void sensor_async_worker_fn(async_context_t *context, struct async_work_on_timeout *timeout);
+static async_at_time_worker_t sensor_worker = {
+    .do_work = sensor_async_worker_fn};
+
+#define WIFI_WORKER_PERIOD_MS (5 * 1000)
+static void wifi_async_worker_fn(async_context_t *context, struct async_work_on_timeout *timeout);
+static async_at_time_worker_t wifi_worker = {
+    .do_work = wifi_async_worker_fn};
 
 int main()
 {
     stdio_init_all();
 
+    watchdog_enable(WATCHDOG_TIMEOUT_MS, true);
+
     io_init();
     sensing_init();
-
-    // wifi_save_creds(WIFI_SSID, WIFI_PW);
 
     if (io_reset_active())
     {
@@ -30,14 +42,11 @@ int main()
         config_reset();
     }
 
-    // Initialize Network
-    //
-    // Enable Wifi if configured
-    // Otherwise enable AP
     char *wifi_ssid = config_get()->wifi_ssid;
     printf("config [0x%02x]\n", wifi_ssid[0]);
 
-    // If the flash is set
+    // Check if the wifi is configured
+    //      Flash erases to 0xFF, so that will be an unconfigured state
     bool wifi_configured = wifi_ssid[0] != 0xff;
     if (wifi_configured)
     {
@@ -59,11 +68,37 @@ int main()
 
     webserver_init();
 
+    // The wifi_init or access_point_init calls will setup the async_context
+    async_context_t *context = cyw43_arch_async_context();
+    if (wifi_configured)
+    {
+        async_context_add_at_time_worker(context, &wifi_worker);
+    }
+    async_context_add_at_time_worker(context, &sensor_worker);
+
     while (true)
     {
-        if (wifi_configured && !wifi_connected())
-        {
-            wifi_reconnect();
-        }
+        watchdog_update();
+        async_context_wait_for_work_ms(context, 5000);
     }
+}
+
+static void wifi_async_worker_fn(async_context_t *context, struct async_work_on_timeout *timeout)
+{
+    if (wifi_reconnect())
+    {
+        io_set_wifi_led(true);
+    }
+    else
+    {
+        io_set_wifi_led(false);
+    }
+
+    async_context_add_at_time_worker_in_ms(context, &wifi_worker, WIFI_WORKER_PERIOD_MS);
+}
+
+static void sensor_async_worker_fn(async_context_t *context, struct async_work_on_timeout *timeout)
+{
+    sensor_gather();
+    async_context_add_at_time_worker_in_ms(context, &sensor_worker, SENSOR_WORKER_PERIOD_MS);
 }
