@@ -25,6 +25,8 @@
 #endif
 #define MEMP_NUM_TCP_SEG            32
 #define MEMP_NUM_ARP_QUEUE          10
+// +1 timeout for MQTT
+#define MEMP_NUM_SYS_TIMEOUT        (LWIP_NUM_SYS_TIMEOUT_INTERNAL + 1)
 #define PBUF_POOL_SIZE              24
 #define LWIP_ARP                    1
 #define LWIP_ETHERNET               1
@@ -54,7 +56,13 @@
 #define DHCP_DOES_ARP_CHECK         0
 #define LWIP_DHCP_DOES_ACD_CHECK    0
 
-#define LWIP_HTTPD_SUPPORT_POST 1
+// Webserver
+#define LWIP_HTTPD_SUPPORT_POST     1
+
+// MQTT
+#define MQTT_CONNECT_TIMOUT         2
+#define MQTT_REQ_TIMEOUT            2
+#define MQTT_CYCLIC_TIMER_INTERVAL  1
 
 // Generated file containing html data
 #define HTTPD_FSDATA_FILE "pico_fsdata.inc"

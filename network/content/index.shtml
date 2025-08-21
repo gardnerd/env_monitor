@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    <form action="/set_wifi_creds" method="POST">
+    <form action="/setup" method="POST">
         <p>
             <label for="ssid">Wifi SSID</label>
             <input id="ssid" type="text" name="ssid">
@@ -13,6 +13,15 @@
         <p>
             <label for="pw">Wifi Password</label>
             <input id="pw" type="text" name="pw">
+        </p>
+        <p>
+            <label for="mqtt_ip">MQTT IP</label>
+            <input id="mqtt_ip" type="text" name="mqtt_ip"
+                pattern="^((25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)$">
+        </p>
+        <p>
+            <label for="mqtt_port">MQTT Port</label>
+            <input id="mqtt_port" type="number" name="mqtt_port" min="0" max="65535">
         </p>
         <p>
             <input type="submit" value="Submit">

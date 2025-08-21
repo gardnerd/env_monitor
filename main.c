@@ -9,6 +9,7 @@
 #include "webserver.h"
 #include "access_point.h"
 #include "wifi.h"
+#include "mqtt_client.h"
 #include "io.h"
 #include "sensing.h"
 #include "config.h"
@@ -56,6 +57,12 @@ int main()
             printf("Wifi failed to init");
             return -1;
         }
+
+        if (!mqtt_client_init())
+        {
+            printf("MQTT failed to init\n");
+            return -1;
+        }
     }
     else
     {
@@ -73,8 +80,8 @@ int main()
     if (wifi_configured)
     {
         async_context_add_at_time_worker(context, &wifi_worker);
+        async_context_add_at_time_worker(context, &sensor_worker);
     }
-    async_context_add_at_time_worker(context, &sensor_worker);
 
     while (true)
     {
@@ -85,8 +92,9 @@ int main()
 
 static void wifi_async_worker_fn(async_context_t *context, struct async_work_on_timeout *timeout)
 {
-    if (wifi_reconnect())
+    if (wifi_reconnect() && mqtt_reconnect())
     {
+
         io_set_wifi_led(true);
     }
     else
@@ -99,6 +107,18 @@ static void wifi_async_worker_fn(async_context_t *context, struct async_work_on_
 
 static void sensor_async_worker_fn(async_context_t *context, struct async_work_on_timeout *timeout)
 {
-    sensor_gather();
+    struct bme68x_data data;
+    if (sensor_gather(&data))
+    {
+        char mqtt_payload[100] = {0};
+        sprintf(mqtt_payload, "{\"temperature\": %.2f, \"pressure\": %.2f, \"humidity\": %.2f}", data.temperature, data.pressure / 1000, data.humidity);
+        if (mqtt_client_publish("living_room/sensor1", mqtt_payload, strlen(mqtt_payload)))
+        {
+            printf("%.2f C, %.2f kPa, %.2f%% RH\n",
+                   data.temperature,
+                   data.pressure / 1000,
+                   data.humidity);
+        }
+    }
     async_context_add_at_time_worker_in_ms(context, &sensor_worker, SENSOR_WORKER_PERIOD_MS);
 }

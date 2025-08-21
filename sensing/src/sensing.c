@@ -6,7 +6,6 @@
 
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
-#include "bme68x.h"
 
 #define I2C_PORT i2c1
 #define I2C_SDA 14
@@ -62,7 +61,7 @@ void sensing_init()
     }
 }
 
-bool sensor_gather()
+bool sensor_gather(struct bme68x_data *data)
 {
     if (bme68x_set_op_mode(BME68X_FORCED_MODE, &bme_dev) != BME68X_OK)
     {
@@ -74,9 +73,8 @@ bool sensor_gather()
     uint32_t delay_period = bme68x_get_meas_dur(BME68X_FORCED_MODE, &bme_conf, &bme_dev);
     bme_dev.delay_us(delay_period, bme_dev.intf_ptr);
 
-    struct bme68x_data data;
     uint8_t data_count;
-    int8_t result = bme68x_get_data(BME68X_FORCED_MODE, &data, &data_count, &bme_dev);
+    int8_t result = bme68x_get_data(BME68X_FORCED_MODE, data, &data_count, &bme_dev);
     if (result != BME68X_OK)
     {
         printf("sensor gather: get data failed ERROR code (%d)\n", result);
@@ -88,11 +86,6 @@ bool sensor_gather()
         printf("sensor gather: no data gathered\n");
         return false;
     }
-
-    printf("%.2f C, %.2f kPa, %.2f%% RH\n",
-           data.temperature,
-           data.pressure / 1000,
-           data.humidity);
 
     return true;
 }

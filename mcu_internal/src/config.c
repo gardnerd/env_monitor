@@ -21,5 +21,6 @@ config_t *config_get()
 
 void config_set(config_t *config)
 {
+    config_reset();
     flash_range_program(FLASH_DATA_OFFSET, (uint8_t *)config, sizeof(config_t));
 }

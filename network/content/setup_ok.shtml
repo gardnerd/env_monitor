@@ -1,11 +1,11 @@
 <html>
 
 <head>
-    <title>Wifi Credentials</title>
+    <title>Setup</title>
 </head>
 
 <body>
-    <p>Wifi credentials failed</p>
+    <p>Setup successfully</p>
     <p><a href="/">Back</a></p>
 </body>
 
