@@ -1,3 +1,5 @@
 build
 !.vscode/*
 secrets/*
+server/data/*
+server/log/*
