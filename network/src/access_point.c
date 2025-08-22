@@ -4,7 +4,7 @@
 
 #include "dhcpserver.h"
 
-static char ap_ssid[] = "test_network";
+static char ap_ssid[] = "env_monitor";
 static char ap_pw[] = "password";
 
 static dhcp_server_t dhcp_server = {0};
