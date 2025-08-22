@@ -1,5 +1,28 @@
 # Environmental Monitor
 
+This project is for an IoT environmental monitor. 
+
+### Equipment
+
+- Pi Pico 2W 
+    - Uses the Wifi module for self configuration and connecting to a Wifi network.
+- BME688
+    - Sensor with Temperature, Humidity, Pressure, and Gas sensing
+    - This project doesn't use the Gas sensing since it's a bit more involved to actually get anything useful from that sensor.
+- Buttons
+    - Reset Button
+        - Reboots the board
+    - Config Reset Button
+        - Resets the internal config from Wifi and MQTT settings
+
+### Features
+
+- Device configuration through AP and webserver
+- Persistent config storage using onboard flash
+- Watchdog to reset the device if something gets stuck
+- Async sensor and network workers so the processor can sleep when not needed
+- Docker based server with visualization and alerts through Grafana and persistent storage using InfluxDB
+
 # Setup
 
 Since there are submodules in this repo you'll need to clone it with:

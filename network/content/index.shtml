@@ -12,12 +12,11 @@
         </p>
         <p>
             <label for="pw">Wifi Password</label>
-            <input id="pw" type="text" name="pw">
+            <input id="pw" type="password" name="pw">
         </p>
         <p>
             <label for="mqtt_ip">MQTT IP</label>
-            <input id="mqtt_ip" type="text" name="mqtt_ip"
-                pattern="^((25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)$">
+            <input id="mqtt_ip" type="text" name="mqtt_ip">
         </p>
         <p>
             <label for="mqtt_port">MQTT Port</label>

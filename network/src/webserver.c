@@ -61,8 +61,8 @@ err_t httpd_post_receive_data(void *connection, struct pbuf *p)
     ip4addr_aton(mqtt_addr_str, &mqtt_addr);
     uint16_t mqtt_port = atoi(mqtt_port_str);
 
-    printf("ssid = \"%s\", pw = \"%s\"\n", wifi_ssid, wifi_pw);
-    printf("mqtt_ip = \"%s\", mqtt_port = \"%d\"\n", mqtt_addr_str, mqtt_port_str);
+    // printf("ssid = \"%s\", pw = \"%s\"\n", wifi_ssid, wifi_pw);
+    // printf("mqtt_ip = \"%s\", mqtt_port = \"%s\"\n", mqtt_addr_str, mqtt_port_str);
 
     wifi_save_creds(wifi_ssid, wifi_pw);
     mqtt_save_creds(mqtt_addr, mqtt_port);
